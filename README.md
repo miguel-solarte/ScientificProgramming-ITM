@@ -154,10 +154,30 @@ miguel-solarte/ScientificProgramming-ITM
 
 # 3. Data Constellations m-QAM
 
-The dataset of QAM constellations was generated using the MATLAB Communications Toolbox with the purpose of obtaining a dataset containing constellations such as 16-QAM, 32-QAM, and 64-QAM. Non-linear noise was added to each constellation to emulate the conditions caused by light passing through a long optical channel. Additionally, each constellation was varied by adjusting inherent features like signal-to-noise ratio (SNR) with a range from 5 dB to 20 dB, and frequency offset, with values of -90, -100, and -110 dB/Hz at 1 MHz, for a transmission frequency of 10 GHz.
+The dataset of QAM constellations was generated using the MATLAB Communications Toolbox with the purpose of obtaining a dataset containing constellations such as 16-QAM, 32-QAM, and 64-QAM. Non-linear noise was added to each constellation to emulate the conditions caused by light passing through a long optical channel. Additionally, each constellation was varied by adjusting inherent features like signal-to-noise ratio (SNR) with a range from 5 dB to 20 dB, and frequency offset, with values of -90, -100, and -110 dB/Hz at 1 MHz, for a transmission frequency of 10 GHz.Finally, it is important to note that each file with the .csv extension contains 100,000 symbols.
+
 
 # 4. Preprocessing
 
+In this section, `Preprocessing/preprocessing.ipynb`, you may find various data preprocessing steps, including:
 
-# 5. Analysis
+- **Derivation of the image generated for the mQAM constellation**: The derivative was implemented for edge detection. Before applying edge detection, an erosion process is necessary to connect the points. Without erosion, the resulting image will be the same as if only edge detection had been performed.
+
+- **The first part of the spectral clustering algorithm**: Spectral clustering consists of two stages. The first stage involves matrix operations to represent the data in a new space defined by eigenvectors. The second stage applies k-means clustering to the data in this eigenvector space. If k-means is applied directly in the original data space, it cannot properly separate the data. However, when k-means is applied in the eigenvector space, it effectively partitions the data.
+
+
+# 5. Analysis and Visualization
+
+For the section `Analysis/analysis.ipynb`, various analyses were performed, starting with data visualization using violin plots. This was followed by a statistical analysis of custom data, where ANOVA was conducted. Finally, a data separability analysis was performed by implementing the spectral clustering algorithm and evaluating the results with appropriate performance metrics, such as Bit Error Rate (BER).
+
+In the `Analysis/` directory, there is a folder named `results_QAM`, where you can save the results obtained from performing spectral clustering and evaluating Bit Error Rate (BER).
+
+# 6. Analysis of the computational complexity of Spectral Clustering
+
+
+
+
+
+
+
 
