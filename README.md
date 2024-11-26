@@ -372,4 +372,47 @@ However, for a single iteration, the computational complexity of constructing th
 
 ### Computational complexity of the matrix $Y$
 
-- The rows of matrix $Y$ are considered points in $\mathbb{R}^{k}$, and the data set is partitioned into $k$ clusters via the k-means algorithm. Accordingly, the initial point designated as $s_{i}$ is assigned to cluster $j$ strictly when the row $i$ of the matrix $Y$ has been allocated to cluster $j$. 
+The rows of matrix $Y$ are considered points in $\mathbb{R}^{k}$, and the data set is partitioned into $k$ clusters via the k-means algorithm. Accordingly, the initial point designated as $s_{i}$ is assigned to cluster $j$ strictly when the row $i$ of the matrix $Y$ has been allocated to cluster $j$. 
+
+The computational complexity is analyzed as follows:
+
+```python
+Y = np.zeros((n,n))
+suma = 0
+
+for i in range(n): #for number 14
+    for j in range(n): #for number 15
+        for k in range(j, n): #for number 16
+
+            suma = suma + (X[i,k]) ** 2
+
+        Y[i,j] = X[i,j] / np.sqrt(suma)
+
+        suma = 0
+```
+
+`for i in range(n)`: Time complexity of $O_{for_{14}}(n)$
+
+`for j in range(i+1,n)`: Time complexity of $O_{for_{15}}(n)$
+
+`for k in range(i+1,n)`: Time complexity of $O_{for_{16}}(n)$
+
+Arithmetic operations (e.g., `suma = suma + (X[i,k]) ** 2`): Time complexity $O(1)$
+
+The combined time complexity is computed as:
+
+$$ O_{for_{14}}(n) \times (O_{for_{15}}(n) + O(1)) \times (O_{for_{16}}(n) + O(1))$$
+
+Since the arithmetic operations are constant-time, they do not affect the asymptotic complexity. Therefore:
+
+$$O_{for_{14}}(n) \times O_{for_{15}}(n) \times O_{for_{16}}(n) = O(n^3)$$
+
+The computational complexity to obtain the matrix $Y$ is $O(n^3)$.
+
+Finally, by summing all the computational complexities calculated previously, we obtain the general computational complexity of spectral clustering:
+
+$$O_(n^2) + O_(n^2) + O_(n^3) + O_(n^3) + O_(n^3)$$
+
+$$2O_(n^2) + 3O_(n^3) \approx O_(n^3)$$
+
+Thus, the computational complexity of spectral clustering is $O(n^3)$.
