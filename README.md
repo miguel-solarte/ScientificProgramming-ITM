@@ -178,7 +178,7 @@ To explain the computational complexity of spectral clustering, we should analyz
 
 ## Computational complexity of the affinity matrix $A$
 
-- Let $S = { s_{1}, ..., s_{n}}$ in $\mathbb{R}^{l}$ be a data set that will be partitioned into $k$ groups, applying a radial basis function (RBF) kernel to build a symmetric matrix known as the affinity matrix $A \in \mathbb{R}^{n\times n}$. The RBF kernel includes a parameter $\sigma$ --referred to as kernel bandwidth-- that must be adjusted to achieve appropriate data clustering
+- Let $S = {s_{1}, ..., s_{n}}$ in $\mathbb{R}^{l}$ be a data set that will be partitioned into $k$ groups, applying a radial basis function (RBF) kernel to build a symmetric matrix known as the affinity matrix $A \in \mathbb{R}^{n\times n}$. The RBF kernel includes a parameter $\sigma$ --referred to as kernel bandwidth-- that must be adjusted to achieve appropriate data clustering
 
 
 $$A_{ij}=exp\left ( -\frac{\left \| s_{i} - s_{j} \right \|^{2}}{2\sigma ^{2}} \right )$$
@@ -314,51 +314,62 @@ $$L = O(n^3)$$
 
 ### Computational complexity of the matirx of eigenvector $X$
 
-The Laplacian matrix is computed using two matrix multiplications. First, we compute $C = D^{-1/2} \cdot A$, and then $L = C \cdot D^{-1/2}$. Below is the Python implementation for matrix multiplication and the associated computational complexity analysis:
+To obtain the eigenvector matrix $X$ from the Laplacian matrix $L$, we perform the Jacobi method. The computational complexity is explained below:
 
 ```python
-I = np.identity(100)
-inv_I = np.identity(100)
-
 theta = 0
-eigenvec = np.identity(100)
-for _ in range(10):
-  for i in range(100):
-      for j in range(i+1,100):
+eigenvec = np.identity(n)
+for _ in range(10): #for number 8
+  for i in range(n): #for number 9
+      for j in range(i+1,n): #for number 10
 
-          theta = np.arctan(2* (L[i,j] / (L[j, j] - L[i,i]))) / 2
+         theta = np.arctan(2* (L[i,j] / (L[j, j] - L[i,i]))) / 2
 
-          I[i,i] = np.cos(theta)
-          I[j, j] = np.cos(theta)
-          I[i,j] = np.sin(theta)
-          I[j,i] = -np.sin(theta)
+         for m in range(n): #for number 11
+            a = L[i,m] * cos(theta) + L[j,m] * (-sin(theta))
+            b = L[i,m] * sin(theta) + L[j,m] * cos(theta)
 
-          inv_I[i,i] = np.cos(theta)
-          inv_I[j, j] = np.cos(theta)
-          inv_I[i,j] = -np.sin(theta)
-          inv_I[j,i] = np.sin(theta)
+            L[i,n] = a
+            L[j,n] = b
+            
+                
 
+         for m in range(n): #for number 12
+            c = L[n,i] * cos(theta) + L[m,j] * (-sin(theta))
+            d = L[m,i] * sin(theta) + L[m,j] * cos(theta)
 
+            L[n,i] = c
+            L[n,j] = d
+            
 
-          L = (inv_I @ L) @ I
+         for m in range(n): #for number 13
+            e = L[n][i] * cos(theta) + L[n][j] * (-sin(theta))
+            f = L[n][i] * sin(theta) + L[n][j] * cos(theta)
 
-          eigenvec = eigenvec @ I
-
-          I = np.identity(100)
-          inv_I = np.identity(100)
+            eigenvec[n][i] = e
+            eigenvec[n][j] = f     
 ```
 
-`for i in range(n)`: Time complexity of $O_{for_5}(n)$
+`for i in range(n)`: Time complexity of $O_{for_9}(n)$
 
-`for j in range(n)`: Time complexity of $O_{for_6}(n)$
+`for j in range(i+1,n)`: Time complexity of $O_{for_{10}}(n)$
 
-`for k in range(n)`: Time complexity of $O_{for_7}(n)$
+`for m in range(n)`: Time complexity of $O_{for_{11}}(n), O_{for_{12}}(n), O_{for_{13}}(n)$
 
-`flag = matrix_1[i,k] * matrix_2[k,j]`: Time complexity of $O(1)$
+Arithmetic operations (e.g., `a = L[i,m] * cos(theta) + L[j,m] * (-sin(theta))`): Time complexity $O(1)$
 
-`one_x_two[i,j] = one_x_two[i,j] + flag`: Time complexity of $O(1)$
+The total complexity for one outer iteration is:
 
+$$ O_{for_9}(n) \times (O_{for_{10}}(n) \times ( O_{for_{10}}(n) + O_{for_{11}}(n) + O_{for_{12}}(n)))$$
 
+$$O_{for_9}(n) \times O_{for_{10}}(n) \times 3O(n) = O(n^3)$$
 
+If the Jacobi method is repeated for $iter$ iterations (corresponding to the loop, 'for number 9'), the total complexity becomes:
+
+$$ iter \cdot O(n^3)$$
+
+However, for a single iteration, the computational complexity of constructing the eigenvector matrix $X$ is $O(n^3)$. 
+
+### Computational complexity of the matrix $Y$
 
 - The rows of matrix $Y$ are considered points in $\mathbb{R}^{k}$, and the data set is partitioned into $k$ clusters via the k-means algorithm. Accordingly, the initial point designated as $s_{i}$ is assigned to cluster $j$ strictly when the row $i$ of the matrix $Y$ has been allocated to cluster $j$. 
