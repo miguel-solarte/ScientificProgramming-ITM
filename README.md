@@ -178,10 +178,11 @@ To explain the computational complexity of spectral clustering, we should analyz
 
 ## Computational complexity of the affinity matrix $A$
 
-- Let $S = \left \{ s_{1}, ..., s_{n} \right \}$ in $\mathbb{R}^{l}$ be a data set that will be partitioned into $k$ groups, applying a radial basis function (RBF) kernel to build a symmetric matrix known as the affinity matrix $A \in \mathbb{R}^{n\times n}$. The RBF kernel includes a parameter $\sigma$ --referred to as kernel bandwidth-- that must be adjusted to achieve appropriate data clustering
+- Let $S = { s_{1}, ..., s_{n}}$ in $\mathbb{R}^{l}$ be a data set that will be partitioned into $k$ groups, applying a radial basis function (RBF) kernel to build a symmetric matrix known as the affinity matrix $A \in \mathbb{R}^{n\times n}$. The RBF kernel includes a parameter $\sigma$ --referred to as kernel bandwidth-- that must be adjusted to achieve appropriate data clustering
 
 
-$$A_{ij}=exp\left ( -\frac{\left \| s_{i} - s_{j} \right \|^{2}}{2\sigma ^{2}} \right ), \hspace{0.1cm} \mathit{if} \hspace{0.1cm}  i \neq j \hspace{0.1cm} \mathit{and} \hspace{0.1cm}  A_{ii} = 0.$$
+$$A_{ij}=exp\left ( -\frac{\left \| s_{i} - s_{j} \right \|^{2}}{2\sigma ^{2}} \right )$$
+if $i \neq j$ and $A_{ii} = 0$
 
 
 ```python
@@ -228,9 +229,10 @@ So, the computational complexity of the affinity matrix $A$ is $O(n^2)$.
 
 - Given the computed affinity matrix $A$, a diagonal matrix $D$ is defined, where their $(i,i)-elements$ represent the sum of the elements of the $i-th$ row of matrix $A$. Subsequently, the diagonal elements of matrix $D$ are normalized
 
-$$ D_{ii} = \sum_{j} A_{ij} $$
+$$D_{ii} = \sum_{j} A_{ij}$$
 
-$$ D^{-1/2} = \dfrac{1}{\sqrt{D_{ii}}}. $$
+
+$$D^{-\frac{1}{2}} = \frac{1}{\sqrt{D_{ii}}}$$
 
 ```python
 D = np.zeros((n,n))
@@ -260,7 +262,7 @@ The computational complexity of diagonal matrix $D$ and matrix $D$ renormalized 
 
 - The Laplacian matrix $L$ is constructed from the matrices $A$ and $D^{-1/2}$, and is denoted by $L = D^{-1/2} A D^{-1/2}$. The first $k$ eigenvectors $x_1, x_2, \ldots, x_k$ of the matrix $L$ will be used to partition the data set $S$ into $k$ mutually exclusive clusters. This process results in the building of the matrix $X = [x_1 \ x_2 \ \ldots \ x_k] \in \mathbb{R}^{n \times k}$. Subsequently, the matrix $X$ is renormalized following equation
 
-$$ Y_{ij}=\frac{X_{ij}}{\left (\sum_{j}X_{ij}^{2}  \right )^{1/2}}. $$
+$$ Y_{ij}=\frac{X_{ij}}{\left (\sum_{j}X_{ij}^{2}  \right )^\frac{1}{2}}$$
 
 ### Computational complexity of the Laplacian matrix $L$
 
